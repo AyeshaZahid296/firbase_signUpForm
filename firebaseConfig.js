@@ -21,69 +21,73 @@ const auth = getAuth(app);
 
 
 
-  let firstName ,lastName , email ,password , resetPassword;
-function readForm(){
-    FirstName = document.getElementById("firstName").value;
-    LastName = document.getElementById("lastName").value;
-    Email = document.getElementById("email").value;
-    Password = document.getElementById("password").value;
-    RepeatPassword = document.getElementById("repeatPassword").value;
-console.log(firstName,lastName,email,password,resetPassword);
+let firstName, lastName, email, password, repeatPassword;
+
+function readForm() {
+  firstName = document.getElementById("firstName").value;
+  lastName = document.getElementById("lastName").value;
+  email = document.getElementById("email").value;
+  password = document.getElementById("password").value;
+  repeatPassword = document.getElementById("repeatPassword").value;
+  console.log(firstName, lastName, email, password, repeatPassword);
 }
-//signup
-document.getElementById("signUp").addEventListener('click',
-function (e){
-    e.preventDefault();
-    readForm();
+// Sign up
+document.getElementById("signUp").addEventListener("click", function (e) {
+  e.preventDefault();
+  readForm();
 
-    if (!firstName || !lastName || !email || !password || !repeatPassword) {
-      alert("Please fill out all fields.");
-      return;
-    }
-  
-    if (password !== repeatPassword) {
-      alert(`Password does'nt match`);
-      return;
-    }
-    createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    alert(`welcome! ${firstName} ${lastName}, Account has been created successfully)
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
-})
+  if (!firstName || !lastName || !email || !password || !repeatPassword) {
+    alert("Please fill out all fields.");
+    return;
+  }
 
-//signin
-document.getElementById("signUp").addEventListener('click',
-function (e){
-    e.preventDefault();
-    readForm();
+  if (password !== repeatPassword) {
+    alert( `Password does'nt match`);
+    return;
+  }
 
-    if (!email || !password ) {
-      alert("Please fill out all fields.");
-      return;
-    }
-  
-    if (password !== repeatPassword) {
-      alert(`Password does'nt match`);
-      return;
-    }
-    createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed up
+      const user = userCredential.user;
+      alert(`Welcome! ${firstName} ${lastName} Account has been created.`);
+      document.getElementById("firstName").value = "";
+      document.getElementById("lastName").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("repeatPassword").value = "";
+      window.location.href = "login.html";
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      alert(`Error! ${errorMessage}`);
+    });
+});
+// Sign In
+document.getElementById("signIn").addEventListener("click", function (e) {
+  e.preventDefault();
+  readForm();
 
-})
+  if (!email || !password) {
+    alert("Please fill out all fields.");
+    return;
+  }
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      alert(`User Signed in..`);
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+      window.location.href = 'success.html'
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode , errorMessage);
+      alert(`Error, ${errorMessage}`)
+      
+    });
+});
